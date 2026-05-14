@@ -3,6 +3,8 @@ import reservasi
 import pengelolaan
 import alat_bantu
 import pemesanan
+import dapur_
+import deliveri
 
 
 while True:
@@ -10,15 +12,19 @@ while True:
     q = ambil[2]
     print("")
     print("================ kafe apa namanya =================")
-    print("[1] Reservasi pelanggan")
-    print("[2] Lihat menu")
+    print("[1] Reservasi Pelanggan")
+    print("[2] Lihat Menu")
     print("[3] Pemesanan")
     print("[4] Daftar Antrian")
-    print("[5] Bersihkan antrian")
+    print("[5] Bersihkan Antrian")
     try:
         print(f"[6] Pesanan atas nama {q[0]["nama"]} telah selesai")
     except IndexError, KeyError, TypeError:
         print(f"[6] Antrian pesanan kosong")
+    print("[7] Antrian Dapur")
+    print("[8] Tambahkan Lokasi")
+    print("[9] Antar Pesanan")
+    print("[10] Tampilkan Peta")
 
 
 
@@ -41,3 +47,11 @@ while True:
         reservasi.bersihkan_antrian()
     elif mode == 6:
         reservasi.pesenan_selesai()
+    elif mode == 7:
+        dapur_.tampilkan_dapur()
+    elif mode == 8:
+        deliveri.tambah_jalan()
+    elif mode == 9:
+        deliveri.pengantaran()
+    elif mode == 10:
+        deliveri.peta()

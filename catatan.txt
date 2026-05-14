@@ -8,3 +8,16 @@
             print(f"Ditemukan: {hasil}")
         else:
             print("Menu tidak ditemukan")
+
+            delivery = DeliveryGraph()
+
+delivery.tambah_jalan("Resto", "Mall", 2)
+delivery.tambah_jalan("Mall", "Perumahan", 3)
+delivery.tambah_jalan("Perumahan", "Rumah Budi", 1)
+
+delivery.tampilkan()
+
+rute = delivery.cari_rute("Resto", "Rumah Budi")
+
+print("\nRute Pengiriman:")
+print(" -> ".join(rute))

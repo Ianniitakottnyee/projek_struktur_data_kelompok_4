@@ -1,5 +1,6 @@
 import pengelolaan
 import menu
+import dapur_
 
 
 def pesanan():
@@ -26,7 +27,6 @@ def pesanan():
         else:
             print("Nama belum terdaftar di antrian")
 
-
     x = pengelolaan.akses()
     root = menu.build_tree("Menu", x[0])
     print("=== DAFTAR MENU ===")
@@ -47,9 +47,11 @@ def pesanan():
             print("Menu tidak ditemukan")
     pesanan_siapa = {"nama": siapa, "pesanan": semua_pesanan}
     kumpulan_pesanan.append(pesanan_siapa)
+
+    dapur_.antrian_dapur(nama=siapa, pesanan= semua_pesanan)
+
     simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": ambil[2], "pesanan": kumpulan_pesanan}
     pengelolaan.Save(simpan)
-
 
 
 def bersihkan_pesanan():
