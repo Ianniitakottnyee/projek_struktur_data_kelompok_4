@@ -1,7 +1,7 @@
-import database_resto
+import pengelolaan
 
 def reservasi_():
-    ambil = database_resto.akses()
+    ambil = pengelolaan.akses()
     antrian = ambil[2]
     try:
         if antrian == []:
@@ -11,13 +11,13 @@ def reservasi_():
     except KeyError, IndexError: 
         no = 1
     nama = input("Reservasi atas nama: ")
-    data = {"nama": nama, "antrian": no}
+    data = {"nama": nama.title(), "antrian": no}
     antrian.append(data)
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": antrian, "pesanan_siapa": ambil[3]}
-    database_resto.Save(simpan)
+    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": antrian, "pesanan": ambil[3]}
+    pengelolaan.Save(simpan)
 
-def tampilkan_antrian(antrian):
-    data = database_resto.akses()
+def tampilkan_antrian():
+    data = pengelolaan.akses()
     antrian = data[2]
     print("Antrian saat ini: ")
     no = 1
@@ -26,15 +26,15 @@ def tampilkan_antrian(antrian):
         no += 1
 
 def bersihkan_antrian():
-    ambil = database_resto.akses()
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": [], "pesanan_siapa": ambil[3]}
-    database_resto.Save(simpan)
+    ambil = pengelolaan.akses()
+    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": [], "pesanan": ambil[3]}
+    pengelolaan.Save(simpan)
 
 def pesenan_selesai():
-    ambil = database_resto.akses()
+    ambil = pengelolaan.akses()
     antrian = ambil[2]
     antrian.pop(0)
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": antrian, "pesanan_siapa": ambil[3]}
-    database_resto.Save(simpan)
+    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": antrian, "pesanan": ambil[3]}
+    pengelolaan.Save(simpan)
 
     

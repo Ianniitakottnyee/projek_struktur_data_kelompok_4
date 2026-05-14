@@ -1,23 +1,33 @@
-import database_resto
+import pengelolaan
 import menu
 
-ambil = database_resto.akses()
-antrian = ambil[2]
 
 def pesanan():
-    ambil = database_resto.akses()
+    ambil = pengelolaan.akses()
+    antrian = ambil[2]
     kumpulan_pesanan = ambil[3]
-    while True:
-        siapa = input("Nama pemesan: ")
+    if antrian == []:
+        print("Belum ada Antrian")
+        return
+    else:
+        print("Daftar Antrian:")
+        no = 1
         for x in antrian:
-            if x["nama"] == siapa:
-                print(f"{x["nama"]} terdaftar dalam antrian")
+            print(f"{no}. {x["nama"]}")
+            no += 1
+    berhenti = False
+    while berhenti == False:
+        siapa = input("Atas nama: ")
+        for x in antrian:
+            if siapa.title() == x["nama"]:
+                berhenti = True
+                siapa = x["nama"]
                 break
-            else:
-                print("Nama belum terdaftar di antrian")
-        break
+        else:
+            print("Nama belum terdaftar di antrian")
 
-    x = database_resto.akses()
+
+    x = pengelolaan.akses()
     root = menu.build_tree("Menu", x[0])
     print("=== DAFTAR MENU ===")
     menu.tampilkan_tree(root)
@@ -31,22 +41,20 @@ def pesanan():
             break
         hasil = menu.index_menu.get(kode_dicari)
         if hasil:
-            print(f"Ditemukan: {hasil}")
+            print(f"Ditemukan: {hasil["nama"].ljust(15)} Rp.{hasil["harga"]}")
+            semua_pesanan.append(hasil["nama"])
         else:
             print("Menu tidak ditemukan")
-        semua_pesanan.append(hasil)
-        pesanan_siapa = {"nama": siapa, "pesanan": semua_pesanan}
-        kumpulan_pesanan.append(semua_pesanan)
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": ambil[2], "pesanan_siapa": pesanan_siapa}
-    database_resto.Save(simpan)
+    pesanan_siapa = {"nama": siapa, "pesanan": semua_pesanan}
+    kumpulan_pesanan.append(pesanan_siapa)
+    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": ambil[2], "pesanan": kumpulan_pesanan}
+    pengelolaan.Save(simpan)
 
-    x = database_resto.akses()
-    print(x[3])
 
 
 def bersihkan_pesanan():
-    ambil = database_resto.akses()
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": [2], "pesanan_siapa": []}
-    database_resto.Save(simpan)
+    ambil = pengelolaan.akses()
+    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": [2], "pesanan": []}
+    pengelolaan.Save(simpan)
 
 

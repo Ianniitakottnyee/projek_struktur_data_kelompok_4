@@ -1,0 +1,10 @@
+        menu.index_tree(root)
+
+        print("\n=== CARI MENU ===")
+        kode_dicari = input("kode menu: ")
+
+        hasil = menu.index_menu.get(kode_dicari)
+        if hasil:
+            print(f"Ditemukan: {hasil}")
+        else:
+            print("Menu tidak ditemukan")

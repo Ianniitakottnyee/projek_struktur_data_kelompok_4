@@ -1,16 +1,9 @@
-
 # =========================
-# 1. DATA MENU
-# =========================
-
-import database_resto
-
-# =========================
-# 2. CLASS TREE NODE
+# CLASS TREE NODE
 # =========================
 
 class TreeNode:
-    def __init__(self, nama, data=None):   # ← PERBAIKAN DI SINI
+    def __init__(self, nama, data=None):
         self.nama = nama
         self.data = data
         self.children = []
@@ -20,7 +13,7 @@ class TreeNode:
 
 
 # =========================
-# 3. BUILD TREE
+# BUILD TREE
 # =========================
 
 def build_tree(nama, struktur):
@@ -40,14 +33,14 @@ def build_tree(nama, struktur):
 
 
 # =========================
-# 4. TAMPILKAN TREE
+# TAMPILKAN TREE
 # =========================
 
 def tampilkan_tree(node, level=0):
     indent = "  " * level
 
     if node.data:
-        print(f"{indent}- {node.data['nama']} (Rp{node.data['harga']}) [{node.data['kode']}]")
+        print(f"{indent}[{node.data['kode']}] {node.data['nama'].ljust(20)} Rp.{node.data['harga']}")
     else:
         print(f"{indent}{node.nama}")
 
@@ -56,7 +49,7 @@ def tampilkan_tree(node, level=0):
 
 
 # =========================
-# 5. CARI MENU (DFS)
+# CARI MENU (DFS)
 # =========================
 
 def cari_menu(node, kode):
@@ -72,7 +65,7 @@ def cari_menu(node, kode):
 
 
 # =========================
-# 6. INDEXING
+# INDEXING
 # =========================
 
 index_menu = {}
