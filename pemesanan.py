@@ -26,6 +26,7 @@ def pesanan():
                 break
         else:
             print("Nama belum terdaftar di antrian")
+    prioritas = input("Pesanan prioritas(ya/tidak): ")
 
     x = pengelolaan.akses()
     root = menu.build_tree("Menu", x[0])
@@ -39,6 +40,15 @@ def pesanan():
         kode_dicari = input("kode menu: ")
         if kode_dicari == ".":
             break
+        if kode_dicari == "/batal" or kode_dicari == "/undo":
+            if semua_pesanan == []:
+                print("belum ada pesanan yang tercatat" )
+            else:
+                batal = semua_pesanan.pop()
+                print(f"{batal} berhasil dibatalkan dari pesanan.")
+                continue
+        else:
+            kode_dicari = kode_dicari.title()
         hasil = menu.index_menu.get(kode_dicari)
         if hasil:
             print(f"Ditemukan: {hasil["nama"].ljust(15)} Rp.{hasil["harga"]}")
@@ -47,8 +57,10 @@ def pesanan():
             print("Menu tidak ditemukan")
     pesanan_siapa = {"nama": siapa, "pesanan": semua_pesanan}
     kumpulan_pesanan.append(pesanan_siapa)
-
-    dapur_.antrian_dapur(nama=siapa, pesanan= semua_pesanan)
+    if prioritas == "ya":
+        dapur_.prioritas(nama= siapa, pesanan= semua_pesanan)
+    else:
+        dapur_.antrian_dapur(nama= siapa, pesanan= semua_pesanan)
 
     simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": ambil[2], "pesanan": kumpulan_pesanan}
     pengelolaan.Save(simpan)

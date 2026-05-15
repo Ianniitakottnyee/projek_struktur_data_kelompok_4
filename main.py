@@ -1,11 +1,15 @@
 import menu
 import reservasi
 import pengelolaan
-import alat_bantu
 import pemesanan
 import dapur_
 import deliveri
+import threading
 
+tutup = False
+
+t = threading.Thread(target=pengelolaan.operasional)
+t.start()
 
 while True:
     ambil = pengelolaan.akses()
@@ -28,7 +32,7 @@ while True:
 
 
 
-    mode = alat_bantu.Cek("Pilih: ", "Input harus berupa angka!")
+    mode = pengelolaan.Cek("Pilih: ", "Input harus berupa angka!")
     if mode == 1:
         reservasi.reservasi_()
 

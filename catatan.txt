@@ -1,23 +1,11 @@
-        menu.index_tree(root)
+import asyncio
 
-        print("\n=== CARI MENU ===")
-        kode_dicari = input("kode menu: ")
+async def operasional():
+    print("Buka!")
+    print("Jam 07:00")
+    await asyncio.sleep(5)
+    print("Jam 10:00")
 
-        hasil = menu.index_menu.get(kode_dicari)
-        if hasil:
-            print(f"Ditemukan: {hasil}")
-        else:
-            print("Menu tidak ditemukan")
-
-            delivery = DeliveryGraph()
-
-delivery.tambah_jalan("Resto", "Mall", 2)
-delivery.tambah_jalan("Mall", "Perumahan", 3)
-delivery.tambah_jalan("Perumahan", "Rumah Budi", 1)
-
-delivery.tampilkan()
-
-rute = delivery.cari_rute("Resto", "Rumah Budi")
-
-print("\nRute Pengiriman:")
-print(" -> ".join(rute))
+asyncio.run(operasional())
+x = input("pesan apa yh: ")
+print(f"pesanan kmu: {x}")

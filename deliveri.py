@@ -1,4 +1,4 @@
-import alat_bantu
+import pengelolaan
 
 class DeliveryGraph:
     def __init__(self):
@@ -53,7 +53,7 @@ delivery = DeliveryGraph()
 def tambah_jalan():
     dari = input("dari: ")
     ke = input("ke: ")
-    jarak = alat_bantu.Cek("jarak: ", "jarak tidak valid!")
+    jarak = pengelolaan.Cek("jarak: ", "jarak tidak valid!")
     delivery.tambah_jalan(dari, ke, jarak)
 
 def peta():
