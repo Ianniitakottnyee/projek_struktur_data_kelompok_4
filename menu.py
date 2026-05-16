@@ -37,7 +37,7 @@ def build_tree(nama, struktur):
 # =========================
 
 def tampilkan_tree(node, level=0):
-    indent = "  " * level
+    indent = "    " * level
 
     if node.data:
         print(f"{indent}[{node.data['kode']}] {node.data['nama'].ljust(20)} Rp.{node.data['harga']}")

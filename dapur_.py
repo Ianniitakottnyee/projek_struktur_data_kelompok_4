@@ -1,4 +1,9 @@
+import time
+from queue import Queue
+log_queue = Queue()
+
 nomor_pesanan = 0
+hari = 1
 
 # =========================================
 # NODE PESANAN
@@ -44,17 +49,6 @@ class KitchenQueue:
         print(f"[PRIORITAS] Pesanan VIP {pelanggan} diprioritaskan.")
 
     # =====================================
-    # SELESAIKAN PESANAN
-    # =====================================
-    def selesai_pesanan(self):
-        if self.head is None:
-            print("Antrean dapur kosong.")
-            return
-        selesai = self.head
-        self.head = self.head.next
-        print(f"[SELESAI] Pesanan {selesai.pelanggan} selesai dimasak.")
-
-    # =====================================
     # TAMPILKAN ANTREAN
     # =====================================
     def tampilkan_antrean(self):
@@ -76,9 +70,23 @@ class KitchenQueue:
     def proses(self):
         if self.head is None:
             print("Tidak ada antrean.")
-        current = self.head
-        for menu in current.daftar_menu:
-            ...
+            return
+        masak = self.head
+        self.head = self.head.next
+        return [masak.nomor, masak.pelanggan]
+        
+
+    # =====================================
+    # SELESAIKAN PESANAN
+    # =====================================
+    def selesai_pesanan(self):
+        if self.head is None:
+            print("Antrean dapur kosong.")
+            return
+        selesai = self.head
+        self.head = self.head.next
+        print(f"[SELESAI] Pesanan {selesai.pelanggan} selesai dimasak.")
+
 
 
 
@@ -89,7 +97,6 @@ dapur = KitchenQueue()
 def antrian_dapur(nama, pesanan):
     global nomor_pesanan
     nomor_pesanan += 1
-
     dapur.tambah_pesanan(nomor_pesanan, nama, pesanan)
 
 def tampilkan_dapur():
@@ -98,8 +105,21 @@ def tampilkan_dapur():
 def prioritas(nama, pesanan):
     global nomor_pesanan
     nomor_pesanan += 1
-
     dapur.tambah_prioritas(nomor_pesanan, nama, pesanan)
 
 def masak():
-    ...
+    while True:
+        ket = dapur.proses()
+        if ket is not None:            
+            time.sleep(5)
+            log_queue.put(f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} selesai dimasak")
+        else:
+            log_queue.put(f"[Dapur] Istirahat...")
+            time.sleep(20)
+
+
+
+def mulai():
+    while True:
+        pesan = log_queue.get()
+        print(pesan)
