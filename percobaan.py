@@ -10,28 +10,45 @@ import pemesanan
 
 # Struktur data global untuk menyimpan status waktu dan menu
 game_time = {
+    "hari": 1,
     "jam": 6,       # Mulai dari jam 6 pagi agar bisa melihat transisi ke jam 7
-    "menit": 0,
+    "menit": 30,
+    "detik": 0,
     "berjalan": True
 }
 
+def reset():
+    global game_time
+    if game_time["jam"] % 24 > 21:
+        game_time["jam"] = game_time["jam"] + (31 - (game_time["jam"] % 24))
+        game_time["menit"] = 0
+    elif game_time["jam"] % 24 < 7:
+        game_time["jam"] = game_time["jam"] + (7 - (game_time["jam"] % 24))
+        game_time["menit"] = 0
+    else:
+        game_time["jam"] = game_time["jam"] + (22 - (game_time["jam"] % 24))
+        game_time["menit"] = 0
+        
+
 # 1 jam game = 50 detik nyata
 # 1 detik nyata = 72 detik game (1 menit 12 detik game)
-DETIK_PER_DETIK_NYATA = 72
 
 def simulasi_jam():
     """Fungsi latar belakang (thread) untuk menjalankan jam."""
     global game_time
+    perdetik = 72
+    sisa_detik = 0
     while game_time["berjalan"]:
         # Update menit di dalam game setiap 1 detik nyata
-        total_detik_baru = game_time["menit"] * 60 + DETIK_PER_DETIK_NYATA
-        menit_tambahan = total_detik_baru // 60
-        game_time["menit"] = total_detik_baru % 60
+        total_detik_baru = game_time["menit"] * 60 + sisa_detik + perdetik#72
+        menit_tambahan = total_detik_baru // 60 #1
+        sisa_detik = total_detik_baru % 60 #12
+        game_time["menit"] = menit_tambahan % 60
         
         # Update jam
-        total_jam_baru = game_time["jam"] + menit_tambahan
+        total_jam_baru = game_time["jam"] + menit_tambahan // 60
         game_time["jam"] = total_jam_baru % 24
-        
+        game_time["hari"] = 1 + (total_jam_baru // 24)
         time.sleep(1)
 
 def cek_jam_operasional():
@@ -44,13 +61,16 @@ def cek_jam_operasional():
 
 def tampilkan_menu_utama():
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("=============================================")
-    print(f"     [Status] Buka")
-    print(f"     [Jam]    {game_time['jam']:02d}:{game_time['menit']:02d}")
+    print("====================================")
+    print("============ Cs.in Cafe ============")
+    print("====================================") 
+    print(f"Jam Sekarang: {game_time['jam']:02d}:{game_time['menit']:02d}")
+    print("------------------------------------")
+    print("Status: BUKA")
+    print("Selamat datang di Cs.in Cafe🍜")
+    print("====================================")
     ambil = pengelolaan.akses()
     q = ambil[2]
-    print("")
-    print("================ Cs.in Cafe =================")
     print("[1] Reservasi Pelanggan")
     print("[2] Lihat Menu")
     print("[3] Pemesanan")
@@ -66,7 +86,10 @@ def tampilkan_menu_utama():
     print("[10] Tampilkan Peta")
 
     mode = pengelolaan.Cek("Pilih: ", "Input harus berupa angka!")
-    if mode == 1:
+    if mode == 0:
+        reset()
+    
+    elif mode == 1:
         reservasi.reservasi_()
 
     elif mode == 2:
@@ -97,6 +120,8 @@ def tampilkan_menu_utama():
 
 
 def tampilkan_layar_terkunci():
+    global game_time
+    game_time["jam"] = game_time["jam"] % 24
     """Layar kunci ketika di luar jam operasional."""
     os.system('cls' if os.name == 'nt' else 'clear')
     print("====================================")
@@ -107,11 +132,14 @@ def tampilkan_layar_terkunci():
     print("Status: MENU UTAMA TIDAK DAPAT DIAKSES")
     print("Jam Operasional: 07:00 s/d 22:00")
     print("====================================")
-    print("Ketik 'refresh' untuk cek waktu atau 'exit' untuk keluar.")
+    print("Tekan ENTER untuk cek waktu atau 'exit' untuk keluar.")
+    print("Ketik /skip untuk tidur.")
     pilihan = input(">> ").lower()
     if pilihan == "exit":
         game_time["berjalan"] = False
         exit()
+    elif pilihan == "/skip":
+        reset()
 
 # --- Program Utama ---
 if __name__ == "__main__":
