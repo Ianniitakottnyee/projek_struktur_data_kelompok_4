@@ -1,6 +1,4 @@
-# =========================
-# CLASS TREE NODE
-# =========================
+
 
 class TreeNode:
     def __init__(self, nama, data=None):
@@ -11,10 +9,6 @@ class TreeNode:
     def add_child(self, node):
         self.children.append(node)
 
-
-# =========================
-# BUILD TREE
-# =========================
 
 def build_tree(nama, struktur):
     node = TreeNode(nama)
@@ -32,10 +26,6 @@ def build_tree(nama, struktur):
     return node
 
 
-# =========================
-# TAMPILKAN TREE
-# =========================
-
 def tampilkan_tree(node, level=0):
     indent = "    " * level
 
@@ -48,10 +38,6 @@ def tampilkan_tree(node, level=0):
         tampilkan_tree(child, level + 1)
 
 
-# =========================
-# CARI MENU (DFS)
-# =========================
-
 def cari_menu(node, kode):
     if node.data and node.data["kode"] == kode:
         return node.data
@@ -63,10 +49,6 @@ def cari_menu(node, kode):
 
     return None
 
-
-# =========================
-# INDEXING
-# =========================
 
 index_menu = {}
 
