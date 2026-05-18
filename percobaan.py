@@ -2,6 +2,7 @@ import threading
 import time
 import os
 import json
+
 '''
 ====================================================================================================================================================
 |                                                                PENGELOLAAN                                                                       |
@@ -103,65 +104,59 @@ def tampilkan_menu_utama():
     q = ambil[2]
     print("[1] Reservasi Pelanggan")
     print("[2] Lihat Menu")
-    print("[3] Pemesanan")
-    print("[4] Daftar Antrian")
-    print("[5] Bersihkan Antrian")
-    try:
-        print(f"[6] Pesanan atas nama {q[0]["nama"]} telah selesai")
-    except IndexError, KeyError, TypeError:
-        print(f"[6] Antrian pesanan kosong")
-    print("[7] Antrian Dapur")
-    print("[8] Tambahkan Lokasi")
-    print("[9] Antar Pesanan")
-    print("[10] Tampilkan Peta")
+    print("[3] Daftar Antrian")
+    print("[4] Pesan antar")
+    print("[5] Peta")
+    print("[6] Antrian Dapur")
+
+    print("====================================")
+    if log_queue.empty():
+        log_queue.put(f"[Dapur] Istirahat...")
+    mulai()
+    print("====================================\n")
 
     mode = Cek("Pilih: ", "Input harus berupa angka!")
     if mode == 0:
-        reset()
+        ...
     
     elif mode == 1:
-        reservasi_()
-        keluar = input("\nTekan enter untuk keluar...")
+        siapa = reservasi_()
+        pesanan(siapa)
+        input("\nTekan enter untuk keluar...")
 
     elif mode == 2:
         x = akses()
         root = build_tree("Menu", x[0])
 
-        print("=== DAFTAR MENU ===")
+        print("=========== DAFTAR MENU ===========")
         tampilkan_tree(root)
-        keluar = input("\nTekan enter untuk keluar...")
+        input("\nTekan enter untuk keluar...")
 
     elif mode == 3:
-        pesanan()
-        keluar = input("\nTekan enter untuk keluar...")
+        tampilkan_antrian()
+        input("\nTekan enter untuk keluar...")
 
     elif mode == 4:
-        tampilkan_antrian()
-        keluar = input("\nTekan enter untuk keluar...")
+        ...
+        pengantaran()
+        input("\nTekan enter untuk keluar...")
 
     elif mode == 5:
-        bersihkan_antrian()
-        keluar = input("\nTekan enter untuk keluar...")
+        print(" [1] Tambahkan lokasi baru.")
+        print(" [2] Lihat peta")
+        pilih = Cek("Pilihan: ", "Input tidak valid.")
+        if pilih == 1:
+            tambah_jalan()
+        elif pilih == 2:
+            peta()
+        input("\nTekan enter untuk keluar...")
 
     elif mode == 6:
-        pesenan_selesai()
-        keluar = input("\nTekan enter untuk keluar...")
-
-    elif mode == 7:
         tampilkan_dapur()
-        keluar = input("\nTekan enter untuk keluar...")
+        input("\nTekan enter untuk keluar...")
 
-    elif mode == 8:
-        tambah_jalan()
-        keluar = input("\nTekan enter untuk keluar...")
-
-    elif mode == 9:
-        pengantaran()
-        keluar = input("\nTekan enter untuk keluar...")
-
-    elif mode == 10:
-        peta()
-        keluar = input("\nTekan enter untuk keluar...")
+    elif mode == -1:
+        reset()
 
 ''' MENU SAAT TUTUP '''
 def tampilkan_layar_terkunci():
@@ -262,6 +257,7 @@ def reservasi_():
     antrian.append(data)
     simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": antrian, "pesanan": ambil[3]}
     Save(simpan)
+    return nama
 
 ''' TAMPILKAN ANTRIAN '''
 def tampilkan_antrian():
@@ -279,16 +275,6 @@ def bersihkan_antrian():
     simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": [], "pesanan": ambil[3]}
     Save(simpan)
 
-''' PESANAN SELESAI '''
-def pesenan_selesai():
-    ambil = akses()
-    antrian = ambil[2]
-    try:
-        antrian.pop(0)
-    except IndexError:
-        print("Tidak ada antrian pesanan")
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": antrian, "pesanan": ambil[3]}
-    Save(simpan)
 
 '''
 MINGGU 2
@@ -296,29 +282,9 @@ MINGGU 2
 |                                                                       PEMESANAN                                                                       |
 ===================================================================================================================================================='''
 ''' PEMESANAN '''
-def pesanan():
+def pesanan(siapa):
     ambil = akses()
-    antrian = ambil[2]
     kumpulan_pesanan = ambil[3]
-    if antrian == []:
-        print("Belum ada Antrian")
-        return
-    else:
-        print("Daftar Antrian:")
-        no = 1
-        for x in antrian:
-            print(f"{no}. {x["nama"]}")
-            no += 1
-    berhenti = False
-    while berhenti == False:
-        siapa = input("Atas nama: ")
-        for x in antrian:
-            if siapa.title() == x["nama"]:
-                berhenti = True
-                siapa = x["nama"]
-                break
-        else:
-            print("Nama belum terdaftar di antrian")
     vip = input("Pesanan prioritas(ya/tidak): ")
 
     x = akses()
@@ -423,19 +389,10 @@ class KitchenQueue:
 
     def proses(self):
         if self.head is None:
-            print("Tidak ada antrean.")
             return
         masak = self.head
         self.head = self.head.next
-        return [masak.nomor, masak.pelanggan]
-        
-    def selesai_pesanan(self):
-        if self.head is None:
-            print("Antrean dapur kosong.")
-            return
-        selesai = self.head
-        self.head = self.head.next
-        print(f"[SELESAI] Pesanan {selesai.pelanggan} selesai dimasak.")
+        return [masak.nomor, masak.pelanggan, masak.daftar_menu]
 
 dapur = KitchenQueue()
 ''' TAMBAH ANTRIAN '''
@@ -456,27 +413,40 @@ def tampilkan_dapur():
 
 ''' MASAK '''
 def masak():
+    data = akses()
+    antrian = data[2]
     while True:
         ket = dapur.proses()
-        if ket is not None:            
-            time.sleep(5)
+        if ket is not None:
+            log_queue.put(f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} sedang diproses")
+            time.sleep(4 * len(ket[2]))
             log_queue.put(f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} selesai dimasak")
+            for i, x in enumerate(antrian):
+                if x["nama"] == ket[1]:
+                    antrian.pop(i)
+                    break
+            simpan = {"Menu": data[0], "stok_bahan": data[1], "antrian": antrian, "pesanan": data[3]}            
+            Save(simpan)
         else:
-            log_queue.put(f"[Dapur] Istirahat...")
-            time.sleep(20)
+            time.sleep(1)
 
-''' [[[]]] '''
+
+''' PRINT ANTRIAN PESAN '''
 def mulai():
-    while True:
+    while not log_queue.empty():
         pesan = log_queue.get()
         print(pesan)
+        log_queue.task_done()
 
+        
 '''
 MINGGU 3
 ====================================================================================================================================================
 |                                                                   DELIVERI                                                                       |
 ===================================================================================================================================================='''
 ''' CLASS DELIVERI GRAPH '''
+import heapq
+
 class DeliveryGraph:
     def __init__(self):
         self.graph = {}
@@ -494,26 +464,30 @@ class DeliveryGraph:
         for lokasi in self.graph:
             print(f"{lokasi} -> {self.graph[lokasi]}")
 
-    def cari_rute(self, awal, tujuan, visited=None):
-        if visited is None:
-            visited = []
-        visited.append(awal)
-        if awal == tujuan:
-            return visited
-        for tetangga in self.graph[awal]:
-            if tetangga not in visited:
-                hasil = self.cari_rute(tetangga, tujuan, visited.copy())
-                if hasil:
-                    return hasil
-        return None
-    
+    def cari_rute(self, awal, tujuan):
+        pq = []
+        heapq.heappush(pq, (0, awal, [awal]))
+        visited = set()
+        while pq:
+            total_jarak, lokasi, jalur = heapq.heappop(pq)
+            if lokasi in visited:
+                continue
+            visited.add(lokasi)
+            if lokasi == tujuan:
+                return jalur, total_jarak
+            for tetangga in self.graph[lokasi]:
+                if tetangga not in visited:
+                    jarak = self.graph[lokasi][tetangga]
+                    heapq.heappush(pq,(total_jarak + jarak, tetangga, jalur + [tetangga]))
+        return None, None
+
 ''' TAMBAH LOKASI '''
 delivery = DeliveryGraph()
 def tambah_jalan():
     dari = input("dari: ")
     ke = input("ke: ")
     jarak = Cek("jarak: ", "jarak tidak valid!")
-    delivery.tambah_jalan(dari, ke, jarak)
+    delivery.tambah_jalan(dari.title(), ke.title(), jarak)
 
 ''' TAMPILKAN PETA '''
 def peta():
@@ -522,10 +496,16 @@ def peta():
 ''' ANTAR PESANAN '''
 def pengantaran():
     dari = "Resto"
-    ke = input("antar pesanan ke ")
-    rute = delivery.cari_rute(dari, ke)
-    print("Rute pengiriman: ")
-    print(" -> ".join(rute))
+    ke = input("antar pesanan ke ").title()
+    rute, jarak = delivery.cari_rute(dari, ke)
+    if rute is None:
+        print("Lokasi tidak ditemukan")
+        return
+
+    print("============= Deliveri =============")
+    print(f"Tujuan: {ke}")
+    print(f"Rute: {" -> ".join(rute)}")
+    print(f"Jarak: {jarak} km")
     
 '''
 ====================================================================================================================================================
@@ -534,11 +514,15 @@ def pengantaran():
 if __name__ == "__main__":
     thread_jam = threading.Thread(target=simulasi_jam, daemon=True)
     thread_jam.start()
+    thread_dapur = threading.Thread(target=masak, daemon=True)
+    thread_dapur.start()
+    log_queue.put(f"[Dapur] Istirahat...")
     try:
         while True:
-            if jam_operasional():
+            if jam_operasional():   
                 tampilkan_menu_utama()
             else:
+                bersihkan_antrian()
                 tampilkan_layar_terkunci()
     except KeyboardInterrupt:
         waktu_program["berjalan"] = False
