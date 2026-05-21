@@ -2,4 +2,926 @@ import pengelolaan
 
 data = pengelolaan.akses()
 
-print(data[2])
+stok = {
+    "Ayam": 34,
+    "Daging Sapi": 18,
+    "Ikan": 22,
+    "Ikan Fillet": 17,
+    "Telur": 41,
+
+    "Nasi": 50,
+    "Mie": 27,
+    "Kwetiau": 15,
+    "Spaghetti": 19,
+    "Fettuccine": 13,
+
+    "Sosis": 21,
+    "Nugget": 26,
+
+    "Tahu": 29,
+    "Tempe": 33,
+    "Kentang": 45,
+    "Jagung": 12,
+
+    "Wortel": 11,
+    "Tomat": 29,
+    "Cabai": 26,
+
+    "Bawang Merah": 38,
+    "Bawang Putih": 37,
+    "Bawang Bombay": 15,
+
+    "Selada": 12,
+    "Kol": 9,
+    "Timun": 14,
+
+    "Roti": 24,
+    "Bun": 20,
+
+    "Keju": 17,
+    "Krim Keju": 10,
+    "Susu": 36,
+    "Cream": 47,
+    "Whipped Cream": 13,
+    "Mentega": 21,
+
+    "Lumpia": 50,
+
+    "Tepung Terigu": 40,
+    "Tepung Kanji": 39,
+    "Tepung Maizena": 20,
+    "Tepung Panir": 12,
+
+    "Ragi": 15,
+    "Baking Powder": 14,
+
+    "Coklat": 28,
+    "Meses": 42,
+    "Es Krim": 20,
+    "Oreo": 17,
+
+    "Gula": 47,
+    "Garam": 39,
+    "Royco": 45,
+    "Lada": 34,
+
+    "Ketumbar": 12,
+    "Cengkeh": 5,
+    "Kayu Manis": 11,
+    "Vanilla": 12,
+    "Matcha": 9,
+
+    "Daun Salam": 12,
+    "Serai": 5,
+    "Jahe": 11,
+    "Kunyit": 2,
+
+    "Kecap Manis": 30,
+    "Kecap Asin": 12,
+    "Saus Tiram": 9,
+
+    "Saus Tomat": 18,
+    "Saus Sambal": 17,
+    "Mayones": 27,
+
+    "Minyak Goreng": 42,
+    "Minyak Zaitun": 10,
+    "Santan": 19,
+    "Kelapa Parut": 17,
+
+    "Jeruk": 23,
+    "Lemon": 12,
+    "Mangga": 30,
+    "Alpukat": 16,
+    "Semangka": 20,
+    "Melon": 18,
+    "Pisang": 44,
+    "Apel": 25,
+    "Strawberry": 14,
+    "Blueberry": 12,
+    "Nanas": 9,
+    "Cherry": 6,
+
+    "Almond": 7,
+    "Kacang": 15,
+    "Ubi": 48,
+
+    "Kopi": 37,
+
+    "Teh Hitam": 46,
+    "Teh Hijau": 12,
+    "Teh Melati": 9,
+
+    "Air": 50,
+    "Es Batu": 48,
+
+    "Soda": 22,
+    "Sirup": 19,
+    "Madu": 8,
+    "Karamel": 11,
+
+    "Pepperoni": 10
+}
+
+menu = menu = {
+    "Menu": {
+        "Makanan": {
+            "Makanan Pembuka": [
+                {"nama": "Soup Ayam", "harga": 15000, "kode": "M01"},
+                {"nama": "Salad Buah", "harga": 18000, "kode": "M02"},
+                {"nama": "Bruschetta", "harga": 20000, "kode": "M03"},
+                {"nama": "Tahu Crispy", "harga": 12000, "kode": "M04"}
+            ],
+            "Makanan Utama": [
+                {"nama": "Nasi Goreng", "harga": 20000, "kode": "M05"},
+                {"nama": "Mie Goreng", "harga": 18000, "kode": "M06"},
+                {"nama": "Ayam Bakar", "harga": 25000, "kode": "M07"},
+                {"nama": "Ayam Goreng", "harga": 23000, "kode": "M08"},
+                {"nama": "Ikan Bakar", "harga": 27000, "kode": "M09"},
+                {"nama": "Sate Ayam", "harga": 22000, "kode": "M10"},
+                {"nama": "Beef Steak", "harga": 40000, "kode": "M11"},
+                {"nama": "Chicken Steak", "harga": 35000, "kode": "M12"},
+                {"nama": "Nasi Ayam Geprek", "harga": 21000, "kode": "M13"},
+                {"nama": "Nasi Rendang", "harga": 30000, "kode": "M14"},
+                {"nama": "Spaghetti Bolognese", "harga": 28000, "kode": "M15"},
+                {"nama": "Fettuccine Carbonara", "harga": 30000, "kode": "M16"},
+                {"nama": "Nasi Uduk", "harga": 18000, "kode": "M36"},
+                {"nama": "Nasi Kuning", "harga": 20000, "kode": "M37"},
+                {"nama": "Bakso", "harga": 17000, "kode": "M38"},
+                {"nama": "Soto Ayam", "harga": 19000, "kode": "M39"},
+                {"nama": "Soto Betawi", "harga": 25000, "kode": "M40"},
+                {"nama": "Rawon", "harga": 26000, "kode": "M41"},
+                {"nama": "Gado-Gado", "harga": 15000, "kode": "M42"},
+                {"nama": "Kwetiau Goreng", "harga": 20000, "kode": "M43"},
+                {"nama": "Nasi Campur", "harga": 22000, "kode": "M44"},
+                {"nama": "Ayam Rica-Rica", "harga": 27000, "kode": "M45"}
+                ],
+
+            "Makanan Penutup": [
+                {"nama": "Es Krim Vanilla", "harga": 12000, "kode": "M17"},
+                {"nama": "Brownies", "harga": 15000, "kode": "M18"},
+                {"nama": "Cheesecake", "harga": 22000, "kode": "M19"},
+                {"nama": "Puding Coklat", "harga": 10000, "kode": "M20"},
+                {"nama": "Waffle", "harga": 18000, "kode": "M21"},
+                {"nama": "Es Campur", "harga": 15000, "kode": "M56"},
+                {"nama": "Es Teler", "harga": 17000, "kode": "M57"},
+                {"nama": "Panna Cotta", "harga": 20000, "kode": "M58"},
+                {"nama": "Tiramisu", "harga": 25000, "kode": "M59"},
+                {"nama": "Macaron", "harga": 22000, "kode": "M60"},
+                {"nama": "Crepes", "harga": 18000, "kode": "M61"},
+                {"nama": "Churros", "harga": 17000, "kode": "M62"},
+                {"nama": "Banana Split", "harga": 20000, "kode": "M63"},
+                {"nama": "Fruit Tart", "harga": 23000, "kode": "M64"},
+                {"nama": "Ice Cream Sundae", "harga": 19000, "kode": "M65"}
+            ],
+            "Makanan Ringan": [
+                {"nama": "Kentang Goreng", "harga": 15000, "kode": "M22"},
+                {"nama": "Onion Ring", "harga": 14000, "kode": "M23"},
+                {"nama": "Popcorn", "harga": 10000, "kode": "M24"},
+                {"nama": "Roti Bakar", "harga": 12000, "kode": "M25"},
+                {"nama": "Donat", "harga": 8000, "kode": "M26"},
+                {"nama": "Cilok", "harga": 7000, "kode": "M27"},
+                {"nama": "Cireng", "harga": 9000, "kode": "M28"},
+                {"nama": "Pisang Goreng", "harga": 10000, "kode": "M46"},
+                {"nama": "Singkong Goreng", "harga": 9000, "kode": "M47"},
+                {"nama": "Tempe Mendoan", "harga": 8000, "kode": "M48"},
+                {"nama": "Martabak Mini", "harga": 15000, "kode": "M49"},
+                {"nama": "Bakwan", "harga": 7000, "kode": "M50"},
+                {"nama": "Risoles", "harga": 9000, "kode": "M51"},
+                {"nama": "Lumpia", "harga": 10000, "kode": "M52"},
+                {"nama": "Kue Cubit", "harga": 8000, "kode": "M53"},
+                {"nama": "Klepon", "harga": 7000, "kode": "M54"},
+                {"nama": "Onde-Onde", "harga": 9000, "kode": "M55"}
+                
+            ],
+            "Makanan Cepat Saji": [
+                {"nama": "Burger Ayam", "harga": 20000, "kode": "M29"},
+                {"nama": "Burger Sapi", "harga": 25000, "kode": "M30"},
+                {"nama": "Hot Dog", "harga": 18000, "kode": "M31"},
+                {"nama": "Pizza Keju", "harga": 30000, "kode": "M32"},
+                {"nama": "Fried Chicken", "harga": 22000, "kode": "M33"},
+                {"nama": "Chicken Nugget", "harga": 17000, "kode": "M34"},
+                {"nama": "Fish and Chips", "harga": 26000, "kode": "M35"}
+            ]
+        },
+
+        "Minuman": {
+            "Coffee": [
+                {"nama": "Espresso", "harga": 15000, "kode": "D01"},
+                {"nama": "Americano", "harga": 18000, "kode": "D02"},
+                {"nama": "Cappuccino", "harga": 22000, "kode": "D03"},
+                {"nama": "Latte", "harga": 23000, "kode": "D04"},
+                {"nama": "Mocha", "harga": 25000, "kode": "D05"},
+                {"nama": "Cold Brew", "harga": 24000, "kode": "D06"},
+                {"nama": "Affogato", "harga": 26000, "kode": "D19"},
+                {"nama": "Flat White", "harga": 24000, "kode": "D20"},
+                {"nama": "Macchiato", "harga": 23000, "kode": "D21"},
+                {"nama": "Irish Coffee", "harga": 30000, "kode": "D22"},
+                {"nama": "Vanilla Latte", "harga": 25000, "kode": "D23"},
+                {"nama": "Caramel Latte", "harga": 26000, "kode": "D24"},
+                {"nama": "Hazelnut Coffee", "harga": 27000, "kode": "D25"},
+                {"nama": "Iced Coffee", "harga": 20000, "kode": "D26"},
+                {"nama": "Coffee Frappe", "harga": 28000, "kode": "D27"},
+                {"nama": "Mocha Frappe", "harga": 29000, "kode": "D28"}
+            ],
+            "Tea": [
+                {"nama": "Teh Hitam", "harga": 8000, "kode": "D07"},
+                {"nama": "Teh Hijau", "harga": 9000, "kode": "D08"},
+                {"nama": "Teh Melati", "harga": 10000, "kode": "D09"},
+                {"nama": "Teh Lemon", "harga": 12000, "kode": "D10"},
+                {"nama": "Teh Tarik", "harga": 15000, "kode": "D11"}
+            ],
+            "Jus & Smoothies": [
+                {"nama": "Jus Jeruk", "harga": 15000, "kode": "D12"},
+                {"nama": "Jus Mangga", "harga": 17000, "kode": "D13"},
+                {"nama": "Jus Alpukat", "harga": 18000, "kode": "D14"},
+                {"nama": "Jus Nanas", "harga": 14000, "kode": "D15"},
+                {"nama": "Jus Semangka", "harga": 13000, "kode": "D29"},
+                {"nama": "Jus Melon", "harga": 14000, "kode": "D30"},
+                {"nama": "Jus Apel", "harga": 16000, "kode": "D31"},
+                {"nama": "Jus Wortel", "harga": 15000, "kode": "D32"},
+                {"nama": "Jus Tomat", "harga": 14000, "kode": "D33"},
+                {"nama": "Smoothie Banana", "harga": 19000, "kode": "D34"},
+                {"nama": "Smoothie Blueberry", "harga": 21000, "kode": "D35"},
+                {"nama": "Smoothie Strawberry", "harga": 20000, "kode": "D36"},
+                {"nama": "Smoothie Mango", "harga": 20000, "kode": "D37"},
+                {"nama": "Smoothie Avocado", "harga": 22000, "kode": "D38"}
+            ],
+            "Minuman Bersoda": [
+                {"nama": "Cola", "harga": 12000, "kode": "D16"},
+                {"nama": "Lemon Soda", "harga": 13000, "kode": "D17"},
+                {"nama": "Orange Soda", "harga": 13000, "kode": "D18"}
+            ]
+        }
+    }
+}
+
+resep = {
+
+    "Soup Ayam": {
+        "Ayam": 1,
+        "Air": 1,
+        "Wortel": 0.3,
+        "Bawang Putih": 0.1,
+        "Garam": 0.1,
+        "Royco": 0.1
+    },
+
+    "Salad Buah": {
+        "Apel": 0.3,
+        "Melon": 0.3,
+        "Strawberry": 0.2,
+        "Mayones": 0.3,
+        "Susu": 0.2
+    },
+
+    "Bruschetta": {
+        "Roti": 1,
+        "Tomat": 0.3,
+        "Minyak Zaitun": 0.1,
+        "Bawang Putih": 0.1
+    },
+
+    "Tahu Crispy": {
+        "Tahu": 1,
+        "Tepung Terigu": 0.3,
+        "Tepung Maizena": 0.2,
+        "Minyak Goreng": 0.4
+    },
+
+    "Nasi Goreng": {
+        "Nasi": 1,
+        "Telur": 1,
+        "Bawang Putih": 0.1,
+        "Kecap Manis": 0.2,
+        "Minyak Goreng": 0.3
+    },
+
+    "Mie Goreng": {
+        "Mie": 1,
+        "Telur": 1,
+        "Kecap Manis": 0.2,
+        "Bawang Putih": 0.1,
+        "Minyak Goreng": 0.3
+    },
+
+    "Ayam Bakar": {
+        "Ayam": 1,
+        "Kecap Manis": 0.3,
+        "Cabai": 0.2,
+        "Bawang Putih": 0.1
+    },
+
+    "Ayam Goreng": {
+        "Ayam": 1,
+        "Tepung Terigu": 0.4,
+        "Minyak Goreng": 0.5,
+        "Bawang Putih": 0.1
+    },
+
+    "Ikan Bakar": {
+        "Ikan": 1,
+        "Cabai": 0.2,
+        "Bawang Putih": 0.1,
+        "Kecap Manis": 0.2
+    },
+
+    "Sate Ayam": {
+        "Ayam": 1,
+        "Kecap Manis": 0.2,
+        "Kacang": 0.4,
+        "Cabai": 0.1
+    },
+
+    "Beef Steak": {
+        "Daging Sapi": 1.5,
+        "Mentega": 0.2,
+        "Lada": 0.1,
+        "Garam": 0.1
+    },
+
+    "Chicken Steak": {
+        "Ayam": 1.2,
+        "Mentega": 0.2,
+        "Lada": 0.1,
+        "Saus Tomat": 0.2
+    },
+
+    "Nasi Ayam Geprek": {
+        "Ayam": 1,
+        "Nasi": 1,
+        "Cabai": 0.4,
+        "Minyak Goreng": 0.3
+    },
+
+    "Nasi Rendang": {
+        "Daging Sapi": 1.5,
+        "Nasi": 1,
+        "Santan": 0.5,
+        "Cabai": 0.2,
+        "Serai": 0.1
+    },
+
+    "Spaghetti Bolognese": {
+        "Spaghetti": 1,
+        "Daging Sapi": 0.7,
+        "Tomat": 0.4,
+        "Bawang Putih": 0.1
+    },
+
+    "Fettuccine Carbonara": {
+        "Fettuccine": 1,
+        "Susu": 0.5,
+        "Keju": 0.3,
+        "Cream": 0.4
+    },
+
+    "Nasi Uduk": {
+        "Nasi": 1,
+        "Santan": 0.5,
+        "Daun Salam": 0.1
+    },
+
+    "Nasi Kuning": {
+        "Nasi": 1,
+        "Kunyit": 0.1,
+        "Santan": 0.4
+    },
+
+    "Bakso": {
+        "Daging Sapi": 1,
+        "Tepung Kanji": 0.3,
+        "Air": 0.5
+    },
+
+    "Soto Ayam": {
+        "Ayam": 1,
+        "Air": 1,
+        "Serai": 0.1,
+        "Daun Salam": 0.1
+    },
+
+    "Soto Betawi": {
+        "Daging Sapi": 1.2,
+        "Santan": 0.5,
+        "Air": 0.7
+    },
+
+    "Rawon": {
+        "Daging Sapi": 1.3,
+        "Kecap Manis": 0.2,
+        "Bawang Putih": 0.1
+    },
+
+    "Gado-Gado": {
+        "Selada": 0.3,
+        "Kol": 0.3,
+        "Kacang": 0.5,
+        "Tahu": 0.5
+    },
+
+    "Kwetiau Goreng": {
+        "Kwetiau": 1,
+        "Telur": 1,
+        "Kecap Asin": 0.2,
+        "Minyak Goreng": 0.3
+    },
+
+    "Nasi Campur": {
+        "Nasi": 1,
+        "Ayam": 0.5,
+        "Telur": 1,
+        "Tempe": 0.3
+    },
+
+    "Ayam Rica-Rica": {
+        "Ayam": 1,
+        "Cabai": 0.5,
+        "Tomat": 0.2
+    },
+
+    "Es Krim Vanilla": {
+        "Susu": 0.5,
+        "Cream": 0.5,
+        "Gula": 0.2
+    },
+
+    "Brownies": {
+        "Tepung Terigu": 0.5,
+        "Coklat": 0.7,
+        "Telur": 1,
+        "Gula": 0.3
+    },
+
+    "Cheesecake": {
+        "Keju": 0.8,
+        "Cream": 0.5,
+        "Gula": 0.2
+    },
+
+    "Puding Coklat": {
+        "Susu": 0.4,
+        "Coklat": 0.3,
+        "Gula": 0.2
+    },
+
+    "Waffle": {
+        "Tepung Terigu": 0.5,
+        "Susu": 0.3,
+        "Telur": 1
+    },
+
+    "Es Campur": {
+        "Susu": 0.3,
+        "Sirup": 0.3,
+        "Es Batu": 0.7,
+        "Melon": 0.3,
+        "Kelapa Parut": 0.2
+    },
+
+    "Es Teler": {
+        "Alpukat": 0.5,
+        "Kelapa Parut": 0.3,
+        "Susu": 0.3,
+        "Es Batu": 0.5
+    },
+
+    "Panna Cotta": {
+        "Cream": 0.7,
+        "Susu": 0.5,
+        "Vanilla": 0.1,
+        "Gula": 0.2
+    },
+
+    "Tiramisu": {
+        "Kopi": 0.3,
+        "Cream": 0.5,
+        "Gula": 0.2,
+        "Coklat": 0.2
+    },
+
+    "Macaron": {
+        "Almond": 0.5,
+        "Gula": 0.3,
+        "Telur": 1
+    },
+
+    "Crepes": {
+        "Tepung Terigu": 0.4,
+        "Susu": 0.3,
+        "Telur": 1,
+        "Mentega": 0.1
+    },
+
+    "Churros": {
+        "Tepung Terigu": 0.5,
+        "Gula": 0.2,
+        "Minyak Goreng": 0.4
+    },
+
+    "Banana Split": {
+        "Pisang": 1,
+        "Es Krim": 1,
+        "Coklat": 0.2,
+        "Cherry": 0.1
+    },
+
+    "Fruit Tart": {
+        "Tepung Terigu": 0.5,
+        "Strawberry": 0.2,
+        "Blueberry": 0.2,
+        "Cream": 0.4
+    },
+
+    "Ice Cream Sundae": {
+        "Es Krim": 1,
+        "Coklat": 0.2,
+        "Cherry": 0.1
+    },
+
+    "Kentang Goreng": {
+        "Kentang": 1,
+        "Minyak Goreng": 0.4,
+        "Garam": 0.1
+    },
+
+    "Onion Ring": {
+        "Bawang Bombay": 0.7,
+        "Tepung Terigu": 0.3,
+        "Minyak Goreng": 0.4
+    },
+
+    "Popcorn": {
+        "Jagung": 0.7,
+        "Mentega": 0.2
+    },
+
+    "Roti Bakar": {
+        "Roti": 1,
+        "Mentega": 0.2,
+        "Meses": 0.3
+    },
+
+    "Donat": {
+        "Tepung Terigu": 0.5,
+        "Gula": 0.2,
+        "Mentega": 0.2,
+        "Ragi": 0.1
+    },
+
+    "Cilok": {
+        "Tepung Kanji": 0.7,
+        "Air": 0.3
+    },
+
+    "Cireng": {
+        "Tepung Kanji": 0.7,
+        "Minyak Goreng": 0.3
+    },
+
+    "Pisang Goreng": {
+        "Pisang": 1,
+        "Tepung Terigu": 0.3,
+        "Minyak Goreng": 0.4
+    },
+
+    "Singkong Goreng": {
+        "Ubi": 0.5,
+        "Minyak Goreng": 0.4,
+        "Garam": 0.1
+    },
+
+    "Tempe Mendoan": {
+        "Tempe": 1,
+        "Tepung Terigu": 0.3,
+        "Minyak Goreng": 0.4
+    },
+
+    "Martabak Mini": {
+        "Tepung Terigu": 0.6,
+        "Telur": 1,
+        "Meses": 0.3,
+        "Mentega": 0.2
+    },
+
+    "Bakwan": {
+        "Wortel": 0.3,
+        "Kol": 0.3,
+        "Tepung Terigu": 0.4,
+        "Minyak Goreng": 0.3
+    },
+
+    "Risoles": {
+        "Tepung Terigu": 0.5,
+        "Wortel": 0.2,
+        "Ayam": 0.3,
+        "Minyak Goreng": 0.3
+    },
+
+    "Lumpia": {
+        "Lumpia": 1,
+        "Wortel": 0.2,
+        "Kol": 0.2,
+        "Minyak Goreng": 0.3
+    },
+
+    "Kue Cubit": {
+        "Tepung Terigu": 0.4,
+        "Gula": 0.2,
+        "Meses": 0.2
+    },
+
+    "Klepon": {
+        "Tepung Kanji": 0.5,
+        "Gula": 0.2,
+        "Kelapa Parut": 0.3
+    },
+
+    "Onde-Onde": {
+        "Tepung Kanji": 0.5,
+        "Kacang": 0.3,
+        "Minyak Goreng": 0.3
+    },
+
+    "Burger Ayam": {
+        "Ayam": 1,
+        "Bun": 1,
+        "Selada": 0.2,
+        "Mayones": 0.2
+    },
+
+    "Burger Sapi": {
+        "Daging Sapi": 1,
+        "Bun": 1,
+        "Selada": 0.2,
+        "Mayones": 0.2
+    },
+
+    "Hot Dog": {
+        "Sosis": 1,
+        "Roti": 1,
+        "Saus Tomat": 0.2
+    },
+
+    "Pizza Keju": {
+        "Tepung Terigu": 1,
+        "Keju": 0.8,
+        "Saus Tomat": 0.3
+    },
+
+    "Fried Chicken": {
+        "Ayam": 1,
+        "Tepung Panir": 0.5,
+        "Minyak Goreng": 0.5
+    },
+
+    "Chicken Nugget": {
+        "Nugget": 1,
+        "Minyak Goreng": 0.3
+    },
+
+    "Fish and Chips": {
+        "Ikan Fillet": 1,
+        "Kentang": 1,
+        "Minyak Goreng": 0.5
+    },
+
+    "Espresso": {
+        "Kopi": 0.5,
+        "Air": 0.5
+    },
+
+    "Americano": {
+        "Kopi": 0.5,
+        "Air": 0.7
+    },
+
+    "Cappuccino": {
+        "Kopi": 0.4,
+        "Susu": 0.5,
+        "Cream": 0.3
+    },
+
+    "Latte": {
+        "Kopi": 0.4,
+        "Susu": 0.6
+    },
+
+    "Mocha": {
+        "Kopi": 0.4,
+        "Coklat": 0.3,
+        "Susu": 0.5
+    },
+
+    "Cold Brew": {
+        "Kopi": 0.5,
+        "Es Batu": 0.5
+    },
+
+    "Affogato": {
+        "Kopi": 0.5,
+        "Es Krim": 1
+    },
+
+    "Flat White": {
+        "Kopi": 0.4,
+        "Susu": 0.5
+    },
+
+    "Macchiato": {
+        "Kopi": 0.5,
+        "Cream": 0.2
+    },
+
+    "Irish Coffee": {
+        "Kopi": 0.5,
+        "Cream": 0.3,
+        "Gula": 0.1
+    },
+
+    "Vanilla Latte": {
+        "Kopi": 0.4,
+        "Susu": 0.5,
+        "Vanilla": 0.1
+    },
+
+    "Caramel Latte": {
+        "Kopi": 0.4,
+        "Susu": 0.5,
+        "Karamel": 0.2
+    },
+
+    "Hazelnut Coffee": {
+        "Kopi": 0.4,
+        "Susu": 0.4,
+        "Kacang": 0.2
+    },
+
+    "Iced Coffee": {
+        "Kopi": 0.5,
+        "Es Batu": 0.5,
+        "Susu": 0.2
+    },
+
+    "Coffee Frappe": {
+        "Kopi": 0.5,
+        "Es Batu": 0.7,
+        "Cream": 0.3
+    },
+
+    "Mocha Frappe": {
+        "Kopi": 0.4,
+        "Coklat": 0.3,
+        "Es Batu": 0.7,
+        "Cream": 0.3
+    },
+
+    "Teh Hitam": {
+        "Teh Hitam": 0.3,
+        "Air": 0.5,
+        "Gula": 0.1
+    },
+
+    "Teh Hijau": {
+        "Teh Hijau": 0.3,
+        "Air": 0.5,
+        "Gula": 0.1
+    },
+
+    "Teh Melati": {
+        "Teh Melati": 0.3,
+        "Air": 0.5,
+        "Gula": 0.1
+    },
+
+    "Teh Lemon": {
+        "Teh Hitam": 0.3,
+        "Lemon": 0.3,
+        "Gula": 0.1
+    },
+
+    "Teh Tarik": {
+        "Teh Hitam": 0.3,
+        "Susu": 0.5,
+        "Gula": 0.2
+    },
+
+    "Jus Jeruk": {
+        "Jeruk": 1,
+        "Air": 0.3,
+        "Gula": 0.1
+    },
+
+    "Jus Mangga": {
+        "Mangga": 1,
+        "Air": 0.3
+    },
+
+    "Jus Alpukat": {
+        "Alpukat": 1,
+        "Susu": 0.3
+    },
+
+    "Smoothie Strawberry": {
+        "Strawberry": 1,
+        "Susu": 0.5,
+        "Es Batu": 0.5
+    },
+
+    "Jus Nanas": {
+        "Nanas": 1,
+        "Air": 0.3
+    },
+
+    "Jus Semangka": {
+        "Semangka": 1,
+        "Air": 0.3
+    },
+
+    "Jus Melon": {
+        "Melon": 1,
+        "Air": 0.3
+    },
+
+    "Smoothie Blueberry": {
+        "Blueberry": 1,
+        "Susu": 0.5,
+        "Es Batu": 0.5
+    },
+
+    "Smoothie Banana": {
+        "Pisang": 1,
+        "Susu": 0.5
+    },
+
+    "Jus Apel": {
+        "Apel": 1,
+        "Air": 0.3
+    },
+
+    "Jus Wortel": {
+        "Wortel": 1,
+        "Air": 0.3
+    },
+
+    "Jus Tomat": {
+        "Tomat": 1,
+        "Air": 0.3
+    },
+
+    "Smoothie Mango": {
+        "Mangga": 1,
+        "Susu": 0.5,
+        "Es Batu": 0.5
+    },
+
+    "Smoothie Avocado": {
+        "Alpukat": 1,
+        "Susu": 0.5,
+        "Es Batu": 0.5
+    },
+
+    "Cola": {
+        "Soda": 1,
+        "Es Batu": 0.5
+    },
+
+    "Lemon Soda": {
+        "Soda": 1,
+        "Lemon": 0.5,
+        "Es Batu": 0.5
+    },
+
+    "Orange Soda": {
+        "Soda": 1,
+        "Jeruk": 0.5,
+        "Es Batu": 0.5
+    }
+}
+
+
+import percobaan
+simpan = {"Menu": menu, "stok_bahan": stok, "antrian": data[2], "pesanan": data[3], "resep": resep}   
+
+def Simpan(menu=None, stok=None, antrian=None, pesanan=None, resep=None, peta=None):
+    data = percobaan.akses()
+    try:
+        if menu is None:
+            menu = data[0]
+        if stok is None:
+            stok = data[1]
+        if antrian is None:
+            antrian = data[2]
+        if pesanan is None:
+            pesanan = data[3]
+        if resep is None:
+            resep = data[4]
+        if peta is None:
+            peta = data[5]
+    except KeyError:
+        ...
+    simpan = {"Menu": menu, "stok_bahan": stok, "antrian": antrian, "pesanan": pesanan, "resep": resep, "peta": peta}
+    percobaan.Save(simpan)
+    
+    
+Simpan(menu= menu, stok=stok)
