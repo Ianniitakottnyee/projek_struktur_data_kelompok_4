@@ -191,6 +191,9 @@ def tampilkan_menu_utama():
         gudang.tampilkan_stok()
         input("\nTekan enter untuk keluar...")
 
+    elif mode == 11:
+        exit()
+
     elif mode == -1:
         reset()
 
@@ -327,6 +330,7 @@ def pesanan(siapa):
 
     print("\n=== Pilih Pesanan ===")
     semua_pesanan = []
+    print("Pilih menu berdasarkan kode(ketik '.' untuk selesai memesan dan '/batal' untuk membatalkan pesanan).")
     while True:
         kode_dicari = input("kode  ")
         if kode_dicari == ".":
