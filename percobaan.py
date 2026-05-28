@@ -117,6 +117,13 @@ def jam_operasional():
         return True
     return False
 
+''' PRINT ANTRIAN PESAN '''
+def mulai():
+    while not log_queue.empty():
+        pesan = log_queue.get()
+        print(pesan)
+        log_queue.task_done()
+
 ''' MENU UTAMA CAFE '''
 def tampilkan_menu_utama():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -140,7 +147,7 @@ def tampilkan_menu_utama():
 
     print("====================================")
     if diproses is not None:
-        log_queue.put(f"[Dapur] Pesanan #{diproses.nomor} atas nama {diproses.pelanggan} sedang diproses")
+        log_queue.put("\033[91m" + f"[Dapur] Pesanan #{diproses.nomor} atas nama {diproses.nama} sedang diproses" + "\033[0m")
     elif log_queue.empty():
         log_queue.put(f"[Dapur] Istirahat...")
     mulai()
@@ -153,7 +160,6 @@ def tampilkan_menu_utama():
     elif mode == 1:
         siapa = reservasi_()
         pesanan(siapa)
-        time.sleep(1)
         input("\nTekan enter untuk keluar...")
 
     elif mode == 2:
@@ -165,7 +171,7 @@ def tampilkan_menu_utama():
         input("\nTekan enter untuk keluar...")
 
     elif mode == 3:
-        tampilkan_dapur()
+        dapur.tampilkan_antrean()
         input("\nTekan enter untuk keluar...")
 
     elif mode == 4:
@@ -353,9 +359,9 @@ def pesanan(siapa):
     pesanan_siapa = {"nama": siapa, "pesanan": semua_pesanan}
     kumpulan_pesanan.append(pesanan_siapa)
     if vip == "ya":
-        prioritas(nama= siapa, pesanan= semua_pesanan)
+        dapur.tambah_prioritas(nama= siapa, daftar_menu= semua_pesanan)
     else:
-        antrian_dapur(nama= siapa, pesanan= semua_pesanan)
+        dapur.tambah_pesanan(nama= siapa, daftar_menu= semua_pesanan)
 
     Simpan(pesanan= kumpulan_pesanan)
 
@@ -376,9 +382,9 @@ diproses = None
 
 ''' CLASS NODE DAPUR '''
 class OrderNode:
-    def __init__(self, nomor, pelanggan, daftar_menu):
+    def __init__(self, nomor, nama, daftar_menu):
         self.nomor = nomor
-        self.pelanggan = pelanggan
+        self.nama = nama
         self.daftar_menu = daftar_menu
         self.next = None
 
@@ -387,8 +393,11 @@ class KitchenQueue:
     def __init__(self):
         self.head = None
 
-    def tambah_pesanan(self, nomor, pelanggan, daftar_menu):
-        new_order = OrderNode(nomor, pelanggan, daftar_menu)
+    ''' TAMBAH ANTRIAN '''
+    def tambah_pesanan(self, nama, daftar_menu):
+        global nomor_pesanan
+        nomor_pesanan += 1
+        new_order = OrderNode(nomor_pesanan, nama, daftar_menu)
         if self.head is None:
             self.head = new_order
         else:
@@ -396,29 +405,34 @@ class KitchenQueue:
             while current.next:
                 current = current.next
             current.next = new_order
-        print(f"[DAPUR] Pesanan {pelanggan} masuk antrean.")
+        print(f"[DAPUR] Pesanan {nama} masuk antrean.")
 
-    def tambah_prioritas(self, nomor, pelanggan, daftar_menu):
-        new_order = OrderNode(nomor, pelanggan, daftar_menu)
+    ''' TAMBAH ANTRIAN PRIORITAS '''
+    def tambah_prioritas(self, nama, daftar_menu):
+        global nomor_pesanan
+        nomor_pesanan += 1
+        new_order = OrderNode(nomor_pesanan, nama, daftar_menu)
         new_order.next = self.head
         self.head = new_order
-        print(f"[PRIORITAS] Pesanan VIP {pelanggan} diprioritaskan.")
+        print(f"[PRIORITAS] Pesanan VIP {nama} diprioritaskan.")
 
-    def tampilkan_antrean(self, diproses):
+    ''' TAMPILKAN ANTRIAN DAPUR '''
+    def tampilkan_antrean(self):
+        global diproses
         if self.head is None and diproses is None:
             print("Tidak ada antrean.")
             return
         current = self.head
         print("\n=== ANTREAN DAPUR ===")
         print(f"\nNo Pesanan : {diproses.nomor}")
-        print(f"Pelanggan  : {diproses.pelanggan}")
+        print(f"Pelanggan  : {diproses.nama}")
         print("Menu:")
         for menu in diproses.daftar_menu:
             print(f"- {menu}")
         print(" [STATUS] Sedang diproses...")    
         while current:
             print(f"\nNo Pesanan : {current.nomor}")
-            print(f"Pelanggan  : {current.pelanggan}")
+            print(f"Pelanggan  : {current.nama}")
             print("Menu:")
             for menu in current.daftar_menu:
                 print(f"- {menu}")
@@ -431,60 +445,38 @@ class KitchenQueue:
             return
         diproses = self.head
         self.head = self.head.next
-        return [diproses.nomor, diproses.pelanggan, diproses.daftar_menu]
+        return [diproses.nomor, diproses.nama, diproses.daftar_menu]
 
 dapur = KitchenQueue()
-''' TAMBAH ANTRIAN '''
-def antrian_dapur(nama, pesanan):
-    global nomor_pesanan
-    nomor_pesanan += 1
-    dapur.tambah_pesanan(nomor_pesanan, nama, pesanan)
 
-''' TAMBAH ANTRIAN PRIORITAS '''
-def prioritas(nama, pesanan):
-    global nomor_pesanan
-    nomor_pesanan += 1
-    dapur.tambah_prioritas(nomor_pesanan, nama, pesanan)
-
-''' TAMPILKAN ANTRIAN DAPUR '''
-def tampilkan_dapur():
-    global diproses
-    dapur.tampilkan_antrean(diproses=diproses)
-
+''' MASAK '''
 def masak_pesanan(pesanan):
     data = akses()
     kumpulan_resep = data[4]
     global gudang
     resep = None
-    print("========================================")
-    for x in pesanan:
-        if x in kumpulan_resep.keys():
-            resep = kumpulan_resep[f"{x}"]
+    total_bahan = {}
+    for menu in pesanan:
+        if menu in kumpulan_resep.keys():
+            resep = kumpulan_resep[f"{menu}"]
             for bahan, jumlah in resep.items():
-                gudang.gunakan_bahan(nama_bahan=bahan, jumlah=jumlah)
-    print("========================================")
+                if bahan not in total_bahan:
+                    total_bahan[bahan] = 0
+                total_bahan[bahan] += jumlah
+    for bahan, jumlah in total_bahan.items():
+        gudang.gunakan_bahan(nama_bahan=bahan, jumlah=jumlah)
     
-    
-''' MASAK '''
 def masak():
     global diproses
     while True:
         ket = dapur.proses()
         if ket is not None:
             masak_pesanan(ket[2])
-            time.sleep(4 * len(ket[2]))
-            log_queue.put(f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} selesai dimasak")
+            time.sleep(10 * len(ket[2]))
+            log_queue.put("\033[91m" + f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} selesai dimasak" + "\033[0m")
             diproses = None
         else:
-            time.sleep(1)
-
-
-''' PRINT ANTRIAN PESAN '''
-def mulai():
-    while not log_queue.empty():
-        pesan = log_queue.get()
-        print(pesan)
-        log_queue.task_done()
+            time.sleep(10)
 
         
 '''
@@ -589,19 +581,19 @@ class Gudang:
             return
         if nama_bahan not in self.stok:
             self.stok[nama_bahan] = 0
-        self.stok[nama_bahan] += jumlah
-        print(f"[GUDANG] Berhasil membeli {jumlah} {nama_bahan}")
+        self.stok[nama_bahan] = round(self.stok[nama_bahan] + jumlah, 1)
+        log_queue.put("\033[92m" + f"[GUDANG] Berhasil membeli {jumlah} {nama_bahan}" + "\033[0m")
 
     def gunakan_bahan(self, nama_bahan, jumlah):
         if nama_bahan not in self.stok:
-            print("[ERROR] Bahan tidak ditemukan.")
+            log_queue.put("[ERROR] Bahan tidak ditemukan.")
             return
         if self.stok[nama_bahan] < jumlah:
-            print("[ERROR] Stok tidak cukup.")
+            log_queue.put(f"[ERROR] Stok {nama_bahan} tidak cukup.")
+            self.beli_bahan(nama_bahan,jumlah+5)
             return
-        self.stok[nama_bahan] -= jumlah
-        print(f"[DAPUR] Menggunakan {jumlah} {nama_bahan}")
-        print
+        self.stok[nama_bahan] = round(self.stok[nama_bahan] - jumlah, 1)
+        log_queue.put("\033[92m" + f"[DAPUR] Menggunakan {jumlah} {nama_bahan}" + "\033[0m")
         Simpan(stok=self.stok)
 
     def tampilkan_stok(self):
@@ -634,5 +626,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         waktu_program["berjalan"] = False
         print("\nProgram dihentikan.")
-
 
