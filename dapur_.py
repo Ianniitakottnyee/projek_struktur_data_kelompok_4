@@ -1,35 +1,38 @@
+import pengelolaan
 import time
-from queue import Queue
-log_queue = Queue()
+import shared
 
-nomor_pesanan = 0
-hari = 1
+dapur = None
 
-# =========================================
-# NODE PESANAN
-# =========================================
+def set_dapur(queue):
+    global dapur
+    dapur = queue
+
+'''
+MINGGU 3
+====================================================================================================================================================
+|                                                                       DAPUR                                                                       |
+===================================================================================================================================================='''
+
+
+
+''' CLASS NODE DAPUR '''
 class OrderNode:
-    def __init__(self, nomor, pelanggan, daftar_menu):
-
+    def __init__(self, nomor, nama, daftar_menu):
         self.nomor = nomor
-        self.pelanggan = pelanggan
+        self.nama = nama
         self.daftar_menu = daftar_menu
-
         self.next = None
 
-
-# =========================================
-# LINKED LIST DAPUR
-# =========================================
+''' CLASS ANTRIAN DAPUR QUEUE'''
 class KitchenQueue:
     def __init__(self):
         self.head = None
 
-    # =====================================
-    # TAMBAHKAN PESANAN
-    # =====================================
-    def tambah_pesanan(self, nomor, pelanggan, daftar_menu):
-        new_order = OrderNode(nomor, pelanggan, daftar_menu)
+    ''' TAMBAH ANTRIAN '''
+    def tambah_pesanan(self, nama, daftar_menu):
+        shared.nomor_pesanan += 1
+        new_order = OrderNode(shared.nomor_pesanan, nama, daftar_menu)
         if self.head is None:
             self.head = new_order
         else:
@@ -37,89 +40,74 @@ class KitchenQueue:
             while current.next:
                 current = current.next
             current.next = new_order
-        print(f"[DAPUR] Pesanan {pelanggan} masuk antrean.")
+        print(f"[DAPUR] Pesanan {nama} masuk antrean.")
 
-    # =====================================
-    # TAMBAHKAN PRIORITAS
-    # =====================================
-    def tambah_prioritas(self, nomor, pelanggan, daftar_menu):
-        new_order = OrderNode(nomor, pelanggan, daftar_menu)
+    ''' TAMBAH ANTRIAN PRIORITAS '''
+    def tambah_prioritas(self, nama, daftar_menu):
+        shared.nomor_pesanan += 1
+        new_order = OrderNode(shared.nomor_pesanan, nama, daftar_menu)
         new_order.next = self.head
         self.head = new_order
-        print(f"[PRIORITAS] Pesanan VIP {pelanggan} diprioritaskan.")
+        print(f"[PRIORITAS] Pesanan VIP {nama} diprioritaskan.")
 
-    # =====================================
-    # TAMPILKAN ANTREAN
-    # =====================================
+    ''' TAMPILKAN ANTRIAN DAPUR '''
     def tampilkan_antrean(self):
-        if self.head is None:
+        if self.head is None and shared.diproses is None:
             print("Tidak ada antrean.")
             return
         current = self.head
         print("\n=== ANTREAN DAPUR ===")
+        if shared.diproses is not None:
+            print(f"\nNo Pesanan : {shared.diproses.nomor}")
+            print(f"Pelanggan  : {shared.diproses.nama}")
+            print("Menu:")
+            for menu in shared.diproses.daftar_menu:
+                print(f"- {menu}")
+            print(" [STATUS] Sedang diproses...")
         while current:
             print(f"\nNo Pesanan : {current.nomor}")
-            print(f"Pelanggan  : {current.pelanggan}")
+            print(f"Pelanggan  : {current.nama}")
             print("Menu:")
             for menu in current.daftar_menu:
                 print(f"- {menu}")
+            print(" [STATUS] Dalam antrian...")
             current = current.next
-    # =====================================
-    # PROSES PESANAN
-    # =====================================
+
     def proses(self):
         if self.head is None:
-            print("Tidak ada antrean.")
             return
-        masak = self.head
+        shared.diproses = self.head
         self.head = self.head.next
-        return [masak.nomor, masak.pelanggan]
-        
-
-    # =====================================
-    # SELESAIKAN PESANAN
-    # =====================================
-    def selesai_pesanan(self):
-        if self.head is None:
-            print("Antrean dapur kosong.")
-            return
-        selesai = self.head
-        self.head = self.head.next
-        print(f"[SELESAI] Pesanan {selesai.pelanggan} selesai dimasak.")
+        return [shared.diproses.nomor, shared.diproses.nama, shared.diproses.daftar_menu]
 
 
-
-
-# =========================================
-# FUNGSI UNTUK ANTRIAN DAPUR
-# =========================================
-dapur = KitchenQueue()
-def antrian_dapur(nama, pesanan):
-    global nomor_pesanan
-    nomor_pesanan += 1
-    dapur.tambah_pesanan(nomor_pesanan, nama, pesanan)
-
-def tampilkan_dapur():
-    dapur.tampilkan_antrean()
-
-def prioritas(nama, pesanan):
-    global nomor_pesanan
-    nomor_pesanan += 1
-    dapur.tambah_prioritas(nomor_pesanan, nama, pesanan)
-
+''' MASAK '''
+def masak_pesanan(pesanan):
+    data = pengelolaan.akses()
+    kumpulan_resep = data[4]
+    resep = None
+    total_bahan = {}
+    for menu in pesanan:
+        if menu in kumpulan_resep.keys():
+            resep = kumpulan_resep[f"{menu}"]
+            for bahan, jumlah in resep.items():
+                if bahan not in total_bahan:
+                    total_bahan[bahan] = 0
+                total_bahan[bahan] += jumlah
+    for bahan, jumlah in total_bahan.items():
+        shared.penyimpanan.gunakan_bahan(nama_bahan=bahan, jumlah=jumlah)
+    
 def masak():
     while True:
+        if dapur is None:
+            time.sleep(1)
+            continue
         ket = dapur.proses()
-        if ket is not None:            
-            time.sleep(5)
-            log_queue.put(f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} selesai dimasak")
+        if ket is not None:
+            masak_pesanan(ket[2])
+            time.sleep(10 * len(ket[2]))
+            shared.log_queue.put("\033[91m" + f"[Dapur] Pesanan #{ket[0]} atas nama {ket[1]} selesai dimasak" + "\033[0m")
+            shared.diproses = None
         else:
-            log_queue.put(f"[Dapur] Istirahat...")
-            time.sleep(20)
+            time.sleep(10)
 
-
-
-def mulai():
-    while True:
-        pesan = log_queue.get()
-        print(pesan)

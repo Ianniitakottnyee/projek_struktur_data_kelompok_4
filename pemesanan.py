@@ -1,43 +1,30 @@
 import pengelolaan
 import menu
-import dapur_
+import shared
+from menu import tampilkan_tree, index_tree, index_menu
 
 
-def pesanan():
+'''
+MINGGU 2
+====================================================================================================================================================
+|                                                                       PEMESANAN                                                                       |
+===================================================================================================================================================='''
+''' PEMESANAN '''
+def pesanan(siapa):
     ambil = pengelolaan.akses()
-    antrian = ambil[2]
     kumpulan_pesanan = ambil[3]
-    if antrian == []:
-        print("Belum ada Antrian")
-        return
-    else:
-        print("Daftar Antrian:")
-        no = 1
-        for x in antrian:
-            print(f"{no}. {x["nama"]}")
-            no += 1
-    berhenti = False
-    while berhenti == False:
-        siapa = input("Atas nama: ")
-        for x in antrian:
-            if siapa.title() == x["nama"]:
-                berhenti = True
-                siapa = x["nama"]
-                break
-        else:
-            print("Nama belum terdaftar di antrian")
-    prioritas = input("Pesanan prioritas(ya/tidak): ")
+    vip = input("Pesanan prioritas(ya/tidak): ")
 
-    x = pengelolaan.akses()
-    root = menu.build_tree("Menu", x[0])
+    root = menu.build_tree("Menu", ambil[0])
     print("=== DAFTAR MENU ===")
-    menu.tampilkan_tree(root)
-    menu.index_tree(root)
+    tampilkan_tree(root)
+    index_tree(root)
 
     print("\n=== Pilih Pesanan ===")
     semua_pesanan = []
+    print("Pilih menu berdasarkan kode(ketik '.' untuk selesai memesan dan '/batal' untuk membatalkan pesanan).")
     while True:
-        kode_dicari = input("kode menu: ")
+        kode_dicari = input("kode  ")
         if kode_dicari == ".":
             break
         if kode_dicari == "/batal" or kode_dicari == "/undo":
@@ -49,26 +36,21 @@ def pesanan():
                 continue
         else:
             kode_dicari = kode_dicari.title()
-        hasil = menu.index_menu.get(kode_dicari)
+        hasil = index_menu.get(kode_dicari)
         if hasil:
-            print(f"Ditemukan: {hasil["nama"].ljust(15)} Rp.{hasil["harga"]}")
-            semua_pesanan.append(hasil["nama"])
+            print(f"Ditemukan: {hasil['nama'].ljust(15)} Rp.{hasil['harga']}")
+            semua_pesanan.append(hasil['nama'])
         else:
             print("Menu tidak ditemukan")
     pesanan_siapa = {"nama": siapa, "pesanan": semua_pesanan}
     kumpulan_pesanan.append(pesanan_siapa)
-    if prioritas == "ya":
-        dapur_.prioritas(nama= siapa, pesanan= semua_pesanan)
+    if vip == "ya":
+        shared.memasak.tambah_prioritas(nama= siapa, daftar_menu= semua_pesanan)
     else:
-        dapur_.antrian_dapur(nama= siapa, pesanan= semua_pesanan)
+        shared.memasak.tambah_pesanan(nama= siapa, daftar_menu= semua_pesanan)
 
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": ambil[2], "pesanan": kumpulan_pesanan}
-    pengelolaan.Save(simpan)
+    pengelolaan.Simpan(pesanan= kumpulan_pesanan)
 
-
+''' BERSIHKAN PESANAN '''
 def bersihkan_pesanan():
-    ambil = pengelolaan.akses()
-    simpan = {"Menu": ambil[0], "stok_bahan": ambil[1], "antrian": [2], "pesanan": []}
-    pengelolaan.Save(simpan)
-
-
+    pengelolaan.Simpan(pesanan= [])

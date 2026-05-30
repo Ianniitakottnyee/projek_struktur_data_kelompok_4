@@ -1,67 +1,78 @@
 import pengelolaan
 
+
+'''
+MINGGU 3
+====================================================================================================================================================
+|                                                                   DELIVERI                                                                       |
+===================================================================================================================================================='''
+''' CLASS DELIVERI GRAPH '''
+import heapq
+
 class DeliveryGraph:
     def __init__(self):
         self.graph = {}
 
-    # Tambah lokasi/jalan
     def tambah_jalan(self, dari, ke, jarak):
-
-        # Jika node belum ada
         if dari not in self.graph:
             self.graph[dari] = {}
-
         if ke not in self.graph:
             self.graph[ke] = {}
-
-        # Dua arah
         self.graph[dari][ke] = jarak
         self.graph[ke][dari] = jarak
 
-    # Tampilkan graph
     def tampilkan(self):
         print("\n=== PETA DELIVERY ===")
-
         for lokasi in self.graph:
             print(f"{lokasi} -> {self.graph[lokasi]}")
 
-    # DFS sederhana
-    def cari_rute(self, awal, tujuan, visited=None):
+    def cari_rute(self, awal, tujuan):
+        pq = []
+        heapq.heappush(pq, (0, awal, [awal]))
+        visited = set()
+        while pq:
+            total_jarak, lokasi, jalur = heapq.heappop(pq)
+            if lokasi in visited:
+                continue
+            visited.add(lokasi)
+            if lokasi == tujuan:
+                return jalur, total_jarak
+            for tetangga in self.graph[lokasi]:
+                if tetangga not in visited:
+                    jarak = self.graph[lokasi][tetangga]
+                    heapq.heappush(pq,(total_jarak + jarak, tetangga, jalur + [tetangga]))
+        return None, None
 
-        if visited is None:
-            visited = []
-
-        visited.append(awal)
-
-        if awal == tujuan:
-            return visited
-
-        for tetangga in self.graph[awal]:
-
-            if tetangga not in visited:
-
-                hasil = self.cari_rute(
-                    tetangga,
-                    tujuan,
-                    visited.copy()
-                )
-
-                if hasil:
-                    return hasil
-        return None
+''' TAMBAH LOKASI '''
 delivery = DeliveryGraph()
 def tambah_jalan():
-    dari = input("dari: ")
-    ke = input("ke: ")
+    data = pengelolaan.akses()
+    delivery.graph = data[5]
+    dari = input("dari: ").title()
+    ke = input("ke: ").title()
     jarak = pengelolaan.Cek("jarak: ", "jarak tidak valid!")
     delivery.tambah_jalan(dari, ke, jarak)
+    pengelolaan.Simpan(peta= delivery.graph)
+    print("Berhasil menambahkan lokasi baru.")
 
+''' TAMPILKAN PETA '''
 def peta():
+    data = pengelolaan.akses()
+    delivery.graph = data[5]
     delivery.tampilkan()
 
+''' ANTAR PESANAN '''
 def pengantaran():
+    data = pengelolaan.akses()
+    delivery.graph = data[5]
     dari = "Resto"
-    ke = input("antar pesanan ke ")
-    rute = delivery.cari_rute(dari, ke)
-    print("Rute pengiriman: ")
-    print(" -> ".join(rute))
+    ke = input("antar pesanan ke ").title()
+    rute, jarak = delivery.cari_rute(dari, ke)
+    if rute is None:
+        print("Lokasi tidak ditemukan")
+        return
+
+    print("============= Deliveri =============")
+    print(f"Tujuan: {ke}")
+    print(f"Rute: {" -> ".join(rute)}")
+    print(f"Jarak: {jarak} km")
